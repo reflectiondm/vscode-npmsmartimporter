@@ -11,15 +11,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:javascript",
-    "onCommand:extension.sayHello"
+    "onLanguage:javascript"
   ],
   "main": "./out/src/extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.sayHello",
-        "title": "Hello World"
+        "command": "npm-smart-importer.import",
+        "title": "Smart import"
       }
     ]
   },

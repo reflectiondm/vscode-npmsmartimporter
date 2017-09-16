@@ -45,9 +45,9 @@ export class ImportProvider implements CodeActionProvider {
         const title = `Import ${packageName}`;
         const command: Command = {
           title,
-          command: 'test command',
+          command: 'npm-smart-importer.import',
           tooltip: `const ${wordText} = require('${packageName}')`,
-          arguments: ['testarg'],
+          arguments: [packageName, wordText],
         };
         return [command];
       });
