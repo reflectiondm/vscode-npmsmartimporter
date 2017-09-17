@@ -8,11 +8,21 @@ function readJson(file) {
   });
 }
 
-function findNpmPackageName(packageName: string) {
+function getNodePackages() {
+  return [
+    'assert', 'buffer', 'crypto', 'dns', 'fs', 'http', 'https', 'net', 'os', 'path', 'querystring',
+    'readline', 'stream', 'tls', 'tty', 'dgram', 'url', 'util', 'v8', 'vm', 'zlib',
+  ];
+}
+
+function findNpmPackageName(packageName: string): Promise<string[]> {
   const packageJsonPath = join(workspace.rootPath, 'package.json');
   return readJson(packageJsonPath).then((packageJson) => {
-    return Object.keys(packageJson.dependencies).find((dep) => dep.includes(packageName)) ||
-      Object.keys(packageJson.devDependencies).find((dep) => dep.includes(packageName));
+    return [].concat(...
+      Object.keys(packageJson.dependencies).filter((dep) => dep.includes(packageName)),
+      Object.keys(packageJson.devDependencies).filter((dep) => dep.includes(packageName)),
+      getNodePackages().filter((dep) => dep.toLowerCase() === packageName.toLowerCase()),
+    );
   });
 }
 

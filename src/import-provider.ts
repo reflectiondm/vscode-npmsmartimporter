@@ -39,18 +39,14 @@ export class ImportProvider implements CodeActionProvider {
     }
 
     return findNpmPackageName(wordText)
-      .then((packageName) => {
-        if (!packageName) {
-          return [];
-        }
-
-        const title = `Import ${packageName}`;
-        const command: Command = {
-          title,
-          command: 'npmSmartImporter.import',
-          arguments: [packageName, wordText],
-        };
-        return [command];
+      .then((packageNames) => {
+        return packageNames.map((packageName) => {
+          return {
+            title: `Import ${packageName}`,
+            command: 'npmSmartImporter.import',
+            arguments: [packageName, wordText],
+          };
+        });
       });
   }
 }
