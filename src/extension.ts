@@ -6,5 +6,5 @@ import { importPackageEditorCommand } from './import-command';
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerCodeActionsProvider('javascript', new ImportProvider()));
-  context.subscriptions.push(vscode.commands.registerTextEditorCommand('npm-smart-importer.import', importPackageEditorCommand));
+  context.subscriptions.push(vscode.commands.registerTextEditorCommand('npmSmartImporter.import', importPackageEditorCommand));
 }

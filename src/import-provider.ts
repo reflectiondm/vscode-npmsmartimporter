@@ -10,6 +10,7 @@ import {
 } from 'vscode';
 
 import { findNpmPackageName } from './dependencies-resolver';
+import { getConfig } from './config';
 
 function isValueNotDefinedDiagnostic(context: CodeActionContext) {
   return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && diagnostic.code === 'no-undef');
@@ -26,12 +27,13 @@ export class ImportProvider implements CodeActionProvider {
     context: CodeActionContext,
     token: CancellationToken): ProviderResult<Command[]> {
 
+    const config = getConfig();
     const diagnostic = isValueNotDefinedDiagnostic(context);
     let wordText;
     if (diagnostic) {
       const word = getRangeFromDiagnostic(diagnostic);
       wordText = document.getText(word);
-    } else {
+    } else if (config.provideImportSuggestionsOnSelection) {
       const word = document.getWordRangeAtPosition(range.start);
       wordText = document.getText(word);
     }
@@ -45,8 +47,7 @@ export class ImportProvider implements CodeActionProvider {
         const title = `Import ${packageName}`;
         const command: Command = {
           title,
-          command: 'npm-smart-importer.import',
-          tooltip: `const ${wordText} = require('${packageName}')`,
+          command: 'npmSmartImporter.import',
           arguments: [packageName, wordText],
         };
         return [command];
