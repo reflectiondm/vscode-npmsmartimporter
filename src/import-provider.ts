@@ -13,11 +13,18 @@ import { findNpmPackageName } from './dependencies-resolver';
 import { getConfig } from './config';
 
 function isValueNotDefinedDiagnostic(context: CodeActionContext) {
-  return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && diagnostic.code === 'no-undef');
+  return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && diagnostic.code === 'no-undef') ||
+    context.diagnostics.find((diagnostic) => diagnostic.source === 'jshint' && diagnostic.code === 'W117');
 }
 
-function getRangeFromDiagnostic(diagnostic: Diagnostic) {
-  return diagnostic.range;
+function getUndeclaredVariableName(diagnostic: Diagnostic, document: TextDocument) {
+  if (diagnostic.source === 'eslint') {
+    return document.getText(diagnostic.range);
+  } else if (diagnostic.source === 'jshint') {
+    // sadly jshint only contains the start of position of the diagnostic warning
+    return document.getText(document.getWordRangeAtPosition(diagnostic.range.start));
+  }
+  return "";
 }
 
 export class ImportProvider implements CodeActionProvider {
@@ -31,8 +38,7 @@ export class ImportProvider implements CodeActionProvider {
     const diagnostic = isValueNotDefinedDiagnostic(context);
     let wordText;
     if (diagnostic) {
-      const word = getRangeFromDiagnostic(diagnostic);
-      wordText = document.getText(word);
+      wordText = getUndeclaredVariableName(diagnostic, document);
     } else if (config.provideImportSuggestionsOnSelection) {
       const word = document.getWordRangeAtPosition(range.start);
       wordText = document.getText(word);

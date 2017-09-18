@@ -16,6 +16,9 @@ function getNodePackages() {
 }
 
 function findNpmPackageName(packageName: string): Promise<string[]> {
+  if (!packageName) {
+    return Promise.resolve([]);
+  }
   const packageJsonPath = join(workspace.rootPath, 'package.json');
   return readJson(packageJsonPath).then((packageJson) => {
     return [].concat(...
