@@ -1,6 +1,12 @@
 import { TextEditor, TextEditorEdit, Position, TextDocument } from 'vscode';
 import { getConfig } from './config';
 
+const importTypes = {
+  es6: 'es6',
+  require: 'rqeuire',
+  none: 'none',
+};
+
 export function importPackageEditorCommand(
   textEditor: TextEditor,
   edit: TextEditorEdit,
@@ -11,24 +17,35 @@ export function importPackageEditorCommand(
   }
 
   const config = getConfig();
-  const useEs6Import = config.autoDetectImportStatement ? detectIfEs6ImportIsUsed(textEditor.document) :
+  const importInformation = findFirstImportStatement(textEditor.document);
+  const useEs6Import = config.autoDetectImportStatement && importInformation.importType !== importTypes.none ?
+    importInformation.importType === importTypes.es6 :
     config.useES6Import;
 
   const lineToInsert = getImportStatement(wordText, packageName, useEs6Import);
-  edit.insert(new Position(0, 0), lineToInsert);
+  edit.insert(importInformation.position, lineToInsert);
 }
 
-function detectIfEs6ImportIsUsed(textDocument: TextDocument) {
+function findFirstImportStatement(textDocument: TextDocument) {
   for (let i = 0; i < textDocument.lineCount; i++) {
-    const line = textDocument.lineAt(0);
+    const line = textDocument.lineAt(i);
     if (line.text.includes('import') && line.text.includes('from')) {
-      return true;
+      return {
+        importType: importTypes.es6,
+        position: new Position(i, 0),
+      };
     }
     if (line.text.includes('= require(')) {
-      return false;
+      return {
+        importType: importTypes.require,
+        position: new Position(i, 0),
+      };
     }
   }
-  return getConfig().useES6Import;
+  return {
+    importType: importTypes.none,
+    position: new Position(0, 0),
+  };
 }
 
 function getImportStatement(wordText: string, packageName: string, useEs6Import: boolean) {
