@@ -2,6 +2,11 @@
   "name": "npmsmartimporter",
   "displayName": "NPM Smart Importer",
   "description": "An extension provides a quick fix action to insert import statements for undeclared variables based on common naming conventions",
+  "author": {
+    "name": "Andrei Zubov",
+    "email": "reflection.dm@gmail.com",
+    "url": "https://github.com/reflectiondm"
+  },
   "version": "0.1.0",
   "icon": "icon.png",
   "license": "MIT",
