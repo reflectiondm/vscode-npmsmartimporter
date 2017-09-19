@@ -1,65 +1,28 @@
-# npmsmartimporter README
+# NPM Smart Importer
+> Provides a quick fix command that inserts import statement for undeclared variables based on common naming conventions
 
-This is the README for your extension "npmsmartimporter". After writing up a brief description, we recommend including the following sections.
+## What is it for? 
+ Forgetting to import an npm package in file can be frustrating and breaks the flow. But lo! Frustrate no more as Npm Smart Importer will fix this little problem for you!
+
+## Picture worth a thousand words!
+![](https://github.com/reflectiondm/vscode-npmsmartimporter/raw/master/assets/preview.gif)
 
 ## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+When you have an undeclared vairable in your code and use eslint or jshint linter, you will get a linter error. In this case you can click on the variable (with jshint you have to either put a cursor at the beginning of the variable or just highlight it) and a quick fix actions will appear providing a convinient way to add a missing import statement.
+This smart helper can detect whether es6 imports or just plain old require is used in the file based on the existing imports.
+Preferable imports type can be set via settings.
+If you do not have a linter in your project, you can still make use of this extension by enabling the quickfixes for selection.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* `npmSmartImporter.autoDetectImportStatement`: Indicates if smart importer should figure out which import statement to use based on what imports are already present in the file. If none found it will adhere to useES6Import value. Default: true
+* `npmSmartImporter.useES6Import`: If true, es6 import statement will be used for new imports. Default: true
+* `npmSmartImporter.provideImportSuggestionsOnSelection`: If true, import suggestions will be provided not only for linting errors, but also when a variable is highlighted. It is usefull when you do not use linter for some reason, or linting is disabled for undeclared variables. Default: false
 
-## Known Issues
+## Enjoy!
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+---------------
+## License
+MIT © [Andrei Zubov](https://github.com/reflectiondm)

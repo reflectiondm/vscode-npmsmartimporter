@@ -1,14 +1,28 @@
 {
   "name": "npmsmartimporter",
-  "displayName": "npmSmartImporter",
-  "description": "An extension to insert import statements base on commonly used naming conventions",
-  "version": "0.0.1",
+  "displayName": "NPM Smart Importer",
+  "description": "An extension provides a quick fix action to insert import statements for undeclared variables based on common naming conventions",
+  "version": "0.1.0",
+  "icon": "icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reflectiondm/vscode-npmsmartimporter.git"
+  },
   "publisher": "reflectiondm",
   "engines": {
     "vscode": "^1.15.0"
   },
   "categories": [
+    "Snippets",
     "Other"
+  ],
+  "keywords": [
+    "npm",
+    "javscript",
+    "import",
+    "require",
+    "undeclared"
   ],
   "activationEvents": [
     "onLanguage:javascript"
