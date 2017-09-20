@@ -18,13 +18,8 @@ function isValueNotDefinedDiagnostic(context: CodeActionContext) {
 }
 
 function getUndeclaredVariableName(diagnostic: Diagnostic, document: TextDocument) {
-  if (diagnostic.source === 'eslint') {
-    return document.getText(diagnostic.range);
-  } else if (diagnostic.source === 'jshint') {
-    // sadly jshint only contains the start of position of the diagnostic warning
+    // sometimes diagnostic only contains the start of position of the diagnostic warning
     return document.getText(document.getWordRangeAtPosition(diagnostic.range.start));
-  }
-  return "";
 }
 
 export class ImportProvider implements CodeActionProvider {

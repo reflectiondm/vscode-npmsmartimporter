@@ -24,5 +24,13 @@ This extension contributes the following settings:
 ## Enjoy!
 
 ---------------
+# Changelog
+
+## [0.1.1]
+- Fix eslint integration on linux machines
+## [0.1.0]
+- Initial release
+
+---------------
 ## License
 MIT © [Andrei Zubov](https://github.com/reflectiondm)

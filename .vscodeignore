@@ -1,0 +1,10 @@
+.vscode/**
+.vscode-test/**
+assets/**
+src/**
+test/**
+out/test/**
+out/**/*.map
+package-lock.json
+tsconfig.json
+tslint.json
