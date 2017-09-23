@@ -3,7 +3,7 @@ import { getConfig } from './config';
 
 const importTypes = {
   es6: 'es6',
-  require: 'rqeuire',
+  require: 'require',
   none: 'none',
 };
 
