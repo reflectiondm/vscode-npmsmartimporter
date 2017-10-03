@@ -1,6 +1,7 @@
 import { readFile } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
+import { wordBasedMatch } from './dependencies-matcher';
 
 function readJson(file) {
   return new Promise<any>((resolve, reject) => {
@@ -15,18 +16,25 @@ function getNodePackages() {
   ];
 }
 
+function mapToProjectDependencies(packageJson) {
+  return {
+    dependencies: Object.keys(packageJson.dependencies),
+    devDependencies: Object.keys(packageJson.devDependencies),
+  };
+}
+
 function findNpmPackageName(packageName: string): Promise<string[]> {
   if (!packageName) {
     return Promise.resolve([]);
   }
   const packageJsonPath = join(workspace.rootPath, 'package.json');
-  return readJson(packageJsonPath).then((packageJson) => {
-    return [].concat(...
-      Object.keys(packageJson.dependencies).filter((dep) => dep.includes(packageName)),
-      Object.keys(packageJson.devDependencies).filter((dep) => dep.includes(packageName)),
+  return readJson(packageJsonPath)
+    .then(mapToProjectDependencies)
+    .then((project) => [].concat(...
+      wordBasedMatch(packageName, project.dependencies),
+      wordBasedMatch(packageName, project.devDependencies),
       getNodePackages().filter((dep) => dep.toLowerCase() === packageName.toLowerCase()),
-    );
-  });
+    ));
 }
 
 export {
