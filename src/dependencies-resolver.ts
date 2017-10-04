@@ -1,7 +1,7 @@
 import { readFile } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
-import { wordBasedMatch } from './dependencies-matcher';
+import { wordBasedMatch, exactMatch } from './dependencies-matcher';
 
 function readJson(file) {
   return new Promise<any>((resolve, reject) => {
@@ -33,7 +33,7 @@ function findNpmPackageName(packageName: string): Promise<string[]> {
     .then((project) => [].concat(...
       wordBasedMatch(packageName, project.dependencies),
       wordBasedMatch(packageName, project.devDependencies),
-      getNodePackages().filter((dep) => dep.toLowerCase() === packageName.toLowerCase()),
+      exactMatch(packageName, getNodePackages()),
     ));
 }
 

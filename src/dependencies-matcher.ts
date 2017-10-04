@@ -11,3 +11,7 @@ export function wordBasedMatch(searchWord: string, data: string[]) {
     .filter((enrichedItem) => splitToLowerCasedWords(searchWord).every(isInArray(enrichedItem.words)))
     .map((enrichedItem) => enrichedItem.item);
 }
+
+export function exactMatch(searchWord: string, data: string[]) {
+  return data.filter((dep) => toLower(dep) === toLower(searchWord));
+}
