@@ -27,6 +27,7 @@ suite.only('dependencies-matcher', () => {
         { searchWord: 'customReact', expectedMatches: ['custom-react', 'custom-plugin-react'] },
         { searchWord: 'reactDOM', expectedMatches: ['react-dom'] },
         { searchWord: 'unknownPackage', expectedMatches: [] },
+        { searchWord: '_', expectedMatches: [] },
       ];
 
       testCases.forEach((testCase) => {
@@ -53,6 +54,34 @@ suite.only('dependencies-matcher', () => {
         testCases.forEach((testCase) => {
           test(`search for "${testCase.searchWord}" should return [${testCase.expectedMatches}]`, () => {
             const result = sut.exactMatch(testCase.searchWord, dependencies);
+            expect(result).to.have.same.members(testCase.expectedMatches);
+          });
+        });
+      });
+    });
+
+    suite('conventionalMatch', () => {
+      suite('should return matches containing real package name based on a convention', () => {
+        const conventions = [
+          { conventionalVariableName: 'ko', packageName: 'knockout' },
+          { conventionalVariableName: '_', packageName: 'lodash' },
+          { conventionalVariableName: 'clashedName', packageName: 'clashedName1' },
+          { conventionalVariableName: 'clashedName', packageName: 'clashedName2' },
+        ];
+
+        const testCases = [
+          { searchWord: 'ko', expectedMatches: ['knockout'], dependencies: ['knockout'] },
+          { searchWord: 'ko', expectedMatches: [], dependencies: ['lodash'] },
+          { searchWord: '_', expectedMatches: ['lodash'], dependencies: ['lodash']  },
+          { searchWord: '_', expectedMatches: [], dependencies: ['knockout']  },
+          { searchWord: '_ko', expectedMatches: [], dependencies: ['knockout', 'lodash'] },
+          { searchWord: 'clashedName', expectedMatches: ['clashedName1', 'clashedName2'], dependencies: ['clashedName1', 'clashedName2'] },
+          { searchWord: 'clashedName', expectedMatches: ['clashedName2'], dependencies: ['clashedName2'] },
+        ];
+
+        testCases.forEach((testCase) => {
+          test(`search for "${testCase.searchWord}" should return [${testCase.expectedMatches}]`, () => {
+            const result = sut.conventionalMatch(testCase.searchWord, conventions, testCase.dependencies);
             expect(result).to.have.same.members(testCase.expectedMatches);
           });
         });

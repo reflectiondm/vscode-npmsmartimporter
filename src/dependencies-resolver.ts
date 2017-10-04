@@ -1,19 +1,22 @@
 import { readFile } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
-import { wordBasedMatch, exactMatch } from './dependencies-matcher';
+import { wordBasedMatch, exactMatch, conventionalMatch } from './dependencies-matcher';
+
+const knownConventions = [
+  { conventionalVariableName: 'ko', packageName: 'knockout' },
+  { conventionalVariableName: '_', packageName: 'lodash' },
+];
+
+const nodePackages = [
+  'assert', 'buffer', 'crypto', 'dns', 'fs', 'http', 'https', 'net', 'os', 'path', 'querystring',
+  'readline', 'stream', 'tls', 'tty', 'dgram', 'url', 'util', 'v8', 'vm', 'zlib',
+];
 
 function readJson(file) {
   return new Promise<any>((resolve, reject) => {
     readFile(file, (err, data) => err ? reject(err) : resolve(JSON.parse(data.toString())));
   });
-}
-
-function getNodePackages() {
-  return [
-    'assert', 'buffer', 'crypto', 'dns', 'fs', 'http', 'https', 'net', 'os', 'path', 'querystring',
-    'readline', 'stream', 'tls', 'tty', 'dgram', 'url', 'util', 'v8', 'vm', 'zlib',
-  ];
 }
 
 function mapToProjectDependencies(packageJson) {
@@ -33,7 +36,9 @@ function findNpmPackageName(packageName: string): Promise<string[]> {
     .then((project) => [].concat(...
       wordBasedMatch(packageName, project.dependencies),
       wordBasedMatch(packageName, project.devDependencies),
-      exactMatch(packageName, getNodePackages()),
+      conventionalMatch(packageName, knownConventions, project.dependencies),
+      conventionalMatch(packageName, knownConventions, project.devDependencies),
+      exactMatch(packageName, nodePackages),
     ));
 }
 
