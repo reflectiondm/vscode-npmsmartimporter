@@ -20,12 +20,20 @@ This extension contributes the following settings:
 * `npmSmartImporter.autoDetectImportStatement`: Indicates if smart importer should figure out which import statement to use based on what imports are already present in the file. If none found it will adhere to useES6Import value. Default: true
 * `npmSmartImporter.useES6Import`: If true, es6 import statement will be used for new imports. Default: true
 * `npmSmartImporter.provideImportSuggestionsOnSelection`: If true, import suggestions will be provided not only for linting errors, but also when a variable is highlighted. It is useful when you do not use linter for some reason, or linting is disabled for undeclared variables. Default: false
+* `npmSmartImporter.customNamingConventions`: An object with keys setting naming conventions for variables and values for package names used in the project. For example: { 'osm': 'awesome-package', 'tea: 'chai' } Default: {}
 
 ## Enjoy!
 
 ---------------
 # Changelog
-
+## [1.1.0]
+- npmSmartImporter.customNamingConventions setting was added to allow using your own naming conventions for some packages. Simply add them to your vscode settings file:
+```
+"npmSmartImporter.customNamingConventions": {
+  "osm": "awesome-package",
+  "tea": "chai"
+}
+```
 ## [1.0.0]
 - Search through dependencies list is now word-based so for undeclared variable `bodyParser` a quick-fix for importing `body-parser` module will be available
 - Smart importer now understands conventional names for knockout and lodash
