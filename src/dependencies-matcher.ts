@@ -1,4 +1,4 @@
-import { words, map, toLower } from 'lodash';
+import { words, toLower } from 'lodash';
 
 const splitToLowerCasedWords = (s: string) => words(s).map(toLower);
 

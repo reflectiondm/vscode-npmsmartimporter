@@ -2,6 +2,7 @@ import { readFile } from 'fs';
 import { join } from 'path';
 import { workspace } from 'vscode';
 import { wordBasedMatch, exactMatch, conventionalMatch } from './dependencies-matcher';
+import { getConfig } from './config';
 
 const knownConventions = [
   { conventionalVariableName: 'ko', packageName: 'knockout' },
@@ -12,6 +13,10 @@ const nodePackages = [
   'assert', 'buffer', 'crypto', 'dns', 'fs', 'http', 'https', 'net', 'os', 'path', 'querystring',
   'readline', 'stream', 'tls', 'tty', 'dgram', 'url', 'util', 'v8', 'vm', 'zlib',
 ];
+
+function getConventions() {
+  return knownConventions.concat(getConfig().customNamingConventions);
+}
 
 function readJson(file) {
   return new Promise<any>((resolve, reject) => {
@@ -36,8 +41,8 @@ function findNpmPackageName(packageName: string): Promise<string[]> {
     .then((project) => [].concat(...
       wordBasedMatch(packageName, project.dependencies),
       wordBasedMatch(packageName, project.devDependencies),
-      conventionalMatch(packageName, knownConventions, project.dependencies),
-      conventionalMatch(packageName, knownConventions, project.devDependencies),
+      conventionalMatch(packageName, getConventions(), project.dependencies),
+      conventionalMatch(packageName, getConventions(), project.devDependencies),
       exactMatch(packageName, nodePackages),
     ));
 }

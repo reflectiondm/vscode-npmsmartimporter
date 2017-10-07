@@ -55,7 +55,12 @@
         "npmSmartImporter.provideImportSuggestionsOnSelection": {
           "type": "boolean",
           "default": false,
-          "description": "If true, import suggestions will be provided not only for linting errors, but also when a variable is highlighted. It is usefull when you do not use linter for sume reason, or linting is disabled for undeclared variables."
+          "description": "If true, import suggestions will be provided not only for linting errors, but also when a variable is highlighted. It is useful when you do not use linter for some reason, or linting is disabled for undeclared variables."
+        },
+        "npmSmartImporter.customNamingConventions": {
+          "type": "object",
+          "default": {},
+          "description": "An object with keys setting naming conventions for variables and values for package names used in the project. For example: { 'osm': 'awesome-package', 'tea: 'chai' }"
         }
       }
     }
