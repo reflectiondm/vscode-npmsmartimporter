@@ -35,7 +35,8 @@ function findNpmPackageName(packageName: string): Promise<string[]> {
   if (!packageName) {
     return Promise.resolve([]);
   }
-  const packageJsonPath = join(workspace.rootPath, 'package.json');
+  const wsRootPath = workspace.workspaceFolders[0].uri.fsPath;
+  const packageJsonPath = join(wsRootPath, 'package.json');
   return readJson(packageJsonPath)
     .then(mapToProjectDependencies)
     .then((project) => [].concat(...
