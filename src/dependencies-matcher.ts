@@ -1,8 +1,5 @@
 import { words, toLower } from 'lodash';
-
-const splitToLowerCasedWords = (s: string) => words(s).map(toLower);
-
-const isInArray = (arr: string[]) => (s: string) => arr.some((str) => str === s);
+import { matchByWords, splitToLowerCasedWords } from './utils';
 
 const getConventionalPackageNames = (s: string, conventions: IConvention[]) =>
   conventions.filter((convention) => toLower(convention.conventionalVariableName) === toLower(s))
@@ -19,13 +16,7 @@ export function wordBasedMatch(searchWord: string, packageNames: string[]) {
     return [];
   }
 
-  return packageNames
-    .map((item) => ({
-      item,
-      words: splitToLowerCasedWords(item),
-    }))
-    .filter((enrichedItem) => splitToLowerCasedWords(searchWord).every(isInArray(enrichedItem.words)))
-    .map((enrichedItem) => enrichedItem.item);
+  return packageNames.filter((item) => matchByWords(searchWord, item));
 }
 
 export function exactMatch(searchWord: string, packageNames: string[]) {

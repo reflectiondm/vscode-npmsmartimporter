@@ -11,6 +11,8 @@ import {
 
 import { findNpmPackageName } from './dependencies-resolver';
 import { getConfig } from './config';
+import { IWorkspaceModuleProvider } from './workspace-module-provider';
+import { findWorkspaceModules } from './workspace-module-resolver';
 
 function isValueNotDefinedDiagnostic(context: CodeActionContext) {
   return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && diagnostic.code === 'no-undef') ||
@@ -23,6 +25,11 @@ function getUndeclaredVariableName(diagnostic: Diagnostic, document: TextDocumen
 }
 
 export class ImportProvider implements CodeActionProvider {
+  private moduleProvider: IWorkspaceModuleProvider;
+  constructor(moduleProvider: IWorkspaceModuleProvider) {
+    this.moduleProvider = moduleProvider;
+  }
+
   public provideCodeActions(
     document: TextDocument,
     range: Range,
@@ -39,7 +46,10 @@ export class ImportProvider implements CodeActionProvider {
       wordText = document.getText(word);
     }
 
-    return findNpmPackageName(wordText)
+    return Promise.all([
+      findNpmPackageName(wordText),
+      findWorkspaceModules(this.moduleProvider, document.fileName, wordText),
+    ]).then(([npmPackageNames, moduleNames]) => npmPackageNames.concat(moduleNames))
       .then((packageNames) => {
         return packageNames.map((packageName) => {
           return {
@@ -49,5 +59,10 @@ export class ImportProvider implements CodeActionProvider {
           };
         });
       });
+  }
+
+  public dispose() {
+    this.moduleProvider.dispose();
+    console.log('Import provider is disposed');
   }
 }

@@ -1,10 +1,13 @@
-import * as vscode from 'vscode';
+import { ExtensionContext, languages, commands } from 'vscode';
+
 import { ImportProvider } from './import-provider';
 import { importPackageEditorCommand } from './import-command';
+import { WorkspaceModuleProvider } from './workspace-module-provider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  context.subscriptions.push(vscode.languages.registerCodeActionsProvider('javascript', new ImportProvider()));
-  context.subscriptions.push(vscode.commands.registerTextEditorCommand('npmSmartImporter.import', importPackageEditorCommand));
+export function activate(context: ExtensionContext) {
+  const moduleProvider = new WorkspaceModuleProvider();
+  context.subscriptions.push(languages.registerCodeActionsProvider('javascript', new ImportProvider(moduleProvider)));
+  context.subscriptions.push(commands.registerTextEditorCommand('npmSmartImporter.import', importPackageEditorCommand));
 }

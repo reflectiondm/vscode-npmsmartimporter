@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sut from '../src/dependencies-matcher';
 
-suite.only('dependencies-matcher', () => {
+suite('dependencies-matcher', () => {
   suite('wordBasedMatch', () => {
     suite('should return matches containing full word', () => {
       const dependencies = [

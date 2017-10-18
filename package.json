@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
+    "@types/glob": "^5.0.33",
     "@types/lodash": "^4.14.76",
     "@types/mocha": "^2.2.43",
     "@types/node": "^8.0.31",
@@ -83,6 +84,7 @@
     "vscode": "^1.1.5"
   },
   "dependencies": {
+    "glob": "^7.1.2",
     "lodash": "^4.17.4"
   }
 }
