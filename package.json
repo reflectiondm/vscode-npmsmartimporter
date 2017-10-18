@@ -61,6 +61,21 @@
           "type": "object",
           "default": {},
           "description": "An object with keys setting naming conventions for variables and values for package names used in the project. For example: { 'osm': 'awesome-package', 'tea': 'chai' }"
+        },
+        "npmSmartImporter.ignore": {
+          "type": "array",
+          "default": [ "**/node_modules" ],
+          "description": "An array of glob patterns to be ignored when resolving modules names."
+        },
+        "npmSmartImporter.excludeExtension": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, the module file name extension will not be included into the suggested import"
+        },
+        "npmSmartImporter.skipInitialDotForRelativePath": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, the initial dot in relative paths like './../my-file-name' will be skipped resulting into '../my-file-name' line"
         }
       }
     }

@@ -3,6 +3,7 @@ import { workspace, FileSystemWatcher } from 'vscode';
 import * as path from 'path';
 
 import { stripExtension } from './utils';
+import { getConfig } from './config';
 
 const allJsFilesGlobPattern = '**/*.js';
 
@@ -58,10 +59,11 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
 
   private cacheModulePaths() {
     const workspacePath = workspace.workspaceFolders[0].uri.fsPath;
-    // todo: get more ignore patterns from vscode default settings
+    const excludedSearchPatterns = getConfig().searchExcludeGlobPatterns
+      .map((pattern) => `${pattern}/**`);
     const glob = new Glob(`${workspacePath}/${allJsFilesGlobPattern}`, {
-      ignore: [ '**/node_modules/**' ],
-    } , (err, matches) => {
+      ignore: excludedSearchPatterns,
+    }, (err, matches) => {
       if (err) {
         console.log(err);
       }
