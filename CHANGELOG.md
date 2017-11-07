@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to the "npmsmartimporter" extension will be documented in this file.
 
+## [2.0.0]
+- It is possible now to find and import local modules as well as npm packages
+- New settings were added to customize local modules importing behavior
+- npmSmartImporter.ignore setting were added to ignore some folders of your project when searching for possible import options. It is an array of glob patterns and can be used like that:
+```
+"npmSmartImporter.ignore": ["**/public", "**/*.specs.js"]
+```
+- npmSmartImporter.excludeExtension setting were added to control weather a file extension should be included into import
+- npmSmartImporter.skipInitialDotForRelativePath setting were added to omit the leading dot in import path
 ## [1.1.0]
 - npmSmartImporter.customNamingConventions setting was added to allow using your own naming conventions for some packages. Simply add them to your vscode settings file:
 ```

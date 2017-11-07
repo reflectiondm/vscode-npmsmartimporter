@@ -5,7 +5,10 @@
  Forgetting to import an npm package in file can be frustrating and breaks the flow. But lo! Frustrate no more as Npm Smart Importer will fix this little problem for you!
 
 ## Picture worth a thousand words!
+## Importing NPM packages
 ![](https://github.com/reflectiondm/vscode-npmsmartimporter/raw/master/assets/preview.gif)
+## Importing local modules
+![](https://github.com/reflectiondm/vscode-npmsmartimporter/raw/master/assets/preview-modules.gif)
 
 ## Features
 When you have an undeclared variable in your code and use eslint or jshint linter, you will get a linter error. In this case you can click on the variable (with jshint you have to either put a cursor at the beginning of the variable or just highlight it) and a quick fix actions will appear providing a convenient way to add a missing import statement.
@@ -26,6 +29,15 @@ This extension contributes the following settings:
 
 ---------------
 # Changelog
+## [2.0.0]
+- It is possible now to find and import local modules as well as npm packages
+- New settings were added to customize local modules importing behavior
+- npmSmartImporter.ignore setting were added to ignore some folders of your project when searching for possible import options. It is an array of glob patterns and can be used like that:
+```
+"npmSmartImporter.ignore": ["**/public", "**/*.specs.js"]
+```
+- npmSmartImporter.excludeExtension setting were added to control weather a file extension should be included into import
+- npmSmartImporter.skipInitialDotForRelativePath setting were added to omit the leading dot in import path
 ## [1.1.0]
 - npmSmartImporter.customNamingConventions setting was added to allow using your own naming conventions for some packages. Simply add them to your vscode settings file:
 ```

@@ -11,7 +11,8 @@ export function findWorkspaceModules(moduleProvider: IWorkspaceModuleProvider, c
 
   return moduleProvider.getWorkspaceModules()
     .filter((fileInfo) => matchByWords(packageName, fileInfo.fileName))
-    .map((fileInfo) => composeImportPath(currentDocumentPath, fileInfo.fsPath));
+    .map((fileInfo) => composeImportPath(currentDocumentPath, fileInfo.fsPath))
+    .filter((importString) => !!importString);
 }
 
 function composeImportPath(currentDocumentPath: string, fsPath: string) {

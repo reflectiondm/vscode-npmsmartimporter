@@ -14,8 +14,13 @@ import { getConfig } from './config';
 import { IWorkspaceModuleProvider } from './workspace-module-provider';
 import { findWorkspaceModules } from './workspace-module-resolver';
 
+const esLintDiagnosticCodes = [
+  'no-undef',
+  'react/jsx-no-undef',
+];
+
 function isValueNotDefinedDiagnostic(context: CodeActionContext) {
-  return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && diagnostic.code === 'no-undef') ||
+  return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && esLintDiagnosticCodes.some((code) => code === diagnostic.code)) ||
     context.diagnostics.find((diagnostic) => diagnostic.source === 'jshint' && diagnostic.code === 'W117');
 }
 
