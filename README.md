@@ -29,6 +29,9 @@ This extension contributes the following settings:
 
 ---------------
 # Changelog
+## [2.1.0]
+- Fix local module import paths for Windows OS
+- Support jsx files both for activating an extension and local modules import suggestions
 ## [2.0.0]
 - It is possible now to find and import local modules as well as npm packages
 - New settings were added to customize local modules importing behavior
