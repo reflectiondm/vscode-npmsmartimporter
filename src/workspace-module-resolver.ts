@@ -27,5 +27,9 @@ function composeImportPath(currentDocumentPath: string, fsPath: string) {
     relativePath = stripExtension(relativePath);
   }
 
-  return relativePath;
+  return normalizeWindowsPath(relativePath);
+}
+
+function normalizeWindowsPath(windowsPath: string) {
+  return windowsPath.replace(/\\/g, "/");
 }
