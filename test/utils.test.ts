@@ -5,6 +5,7 @@ suite('utils', () => {
   suite('stripExtension', () => {
     const testCases = [
       { fileName: 'some-file.js', expectedName: 'some-file' },
+      { fileName: 'some-file.jsx', expectedName: 'some-file' },
       { fileName: 'some.file.with.dots.js', expectedName: 'some.file.with.dots' },
       { fileName: 'some-file-with-no-extension', expectedName: 'some-file-with-no-extension' },
     ];

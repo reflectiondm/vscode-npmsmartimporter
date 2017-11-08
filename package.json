@@ -29,7 +29,8 @@
     "undeclared"
   ],
   "activationEvents": [
-    "onLanguage:javascript"
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact"
   ],
   "main": "./out/src/extension",
   "contributes": {

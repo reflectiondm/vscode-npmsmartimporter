@@ -5,7 +5,7 @@ import * as path from 'path';
 import { stripExtension } from './utils';
 import { getConfig } from './config';
 
-const allJsFilesGlobPattern = '**/*.js';
+const allJsFilesGlobPattern = '**/*.{js,jsx}';
 
 export interface IWorkspaceModuleProvider {
   getWorkspaceModules(): IFileInfo[];
