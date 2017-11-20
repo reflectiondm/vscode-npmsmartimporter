@@ -31,12 +31,12 @@ function mapToProjectDependencies(packageJson) {
   };
 }
 
-function findNpmPackageName(packageName: string): Promise<string[]> {
+function findNpmPackageName(packageName: string, workspaceFsPath: string): Promise<string[]> {
   if (!packageName) {
     return Promise.resolve([]);
   }
-  const wsRootPath = workspace.workspaceFolders[0].uri.fsPath;
-  const packageJsonPath = join(wsRootPath, 'package.json');
+
+  const packageJsonPath = join(workspaceFsPath, 'package.json');
   return readJson(packageJsonPath)
     .then(mapToProjectDependencies)
     .then((project) => [].concat(...

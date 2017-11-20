@@ -7,6 +7,7 @@ import {
   ProviderResult,
   Range,
   TextDocument,
+  workspace,
 } from 'vscode';
 
 import { findNpmPackageName } from './dependencies-resolver';
@@ -43,24 +44,28 @@ export class ImportProvider implements CodeActionProvider {
 
     const config = getConfig();
     const diagnostic = isValueNotDefinedDiagnostic(context);
-    let wordText;
+    let searchVariableName;
     if (diagnostic) {
-      wordText = getUndeclaredVariableName(diagnostic, document);
+      searchVariableName = getUndeclaredVariableName(diagnostic, document);
     } else if (config.provideImportSuggestionsOnSelection) {
       const word = document.getWordRangeAtPosition(range.start);
-      wordText = document.getText(word);
+      searchVariableName = document.getText(word);
     }
 
+    const currentDocumentWorkspace = workspace.getWorkspaceFolder(document.uri);
+
+    const workspaceFsPath = currentDocumentWorkspace.uri.fsPath;
+
     return Promise.all([
-      findNpmPackageName(wordText),
-      findWorkspaceModules(this.moduleProvider, document.fileName, wordText),
+      findNpmPackageName(searchVariableName, workspaceFsPath),
+      findWorkspaceModules(this.moduleProvider, document.fileName, searchVariableName),
     ]).then(([npmPackageNames, moduleNames]) => npmPackageNames.concat(moduleNames))
       .then((packageNames) => {
         return packageNames.map((packageName) => {
           return {
             title: `Import ${packageName}`,
             command: 'npmSmartImporter.import',
-            arguments: [packageName, wordText],
+            arguments: [packageName, searchVariableName],
           };
         });
       });
