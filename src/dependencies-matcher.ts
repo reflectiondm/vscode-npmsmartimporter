@@ -1,4 +1,4 @@
-import { words, toLower } from 'lodash';
+import { toLower } from 'lodash';
 import { matchByWords, splitToLowerCasedWords } from './utils';
 
 const getConventionalPackageNames = (s: string, conventions: IConvention[]) =>

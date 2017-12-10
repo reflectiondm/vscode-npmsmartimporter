@@ -14,6 +14,7 @@ import { findNpmPackageName } from './dependencies-resolver';
 import { getConfig } from './config';
 import { IWorkspaceModuleProvider } from './workspace-module-provider';
 import { findWorkspaceModules } from './workspace-module-resolver';
+import { IModuleProviderRepository } from './module-provider-repository';
 
 const esLintDiagnosticCodes = [
   'no-undef',
@@ -31,9 +32,10 @@ function getUndeclaredVariableName(diagnostic: Diagnostic, document: TextDocumen
 }
 
 export class ImportProvider implements CodeActionProvider {
-  private moduleProvider: IWorkspaceModuleProvider;
-  constructor(moduleProvider: IWorkspaceModuleProvider) {
-    this.moduleProvider = moduleProvider;
+  private moduleRepository: IModuleProviderRepository;
+
+  constructor(moduleRepository: IModuleProviderRepository) {
+    this.moduleRepository = moduleRepository;
   }
 
   public provideCodeActions(
@@ -54,11 +56,16 @@ export class ImportProvider implements CodeActionProvider {
 
     const currentDocumentWorkspace = workspace.getWorkspaceFolder(document.uri);
 
+    if (!currentDocumentWorkspace) {
+      return [];
+    }
+
     const workspaceFsPath = currentDocumentWorkspace.uri.fsPath;
+    const workspaceModuleProvider = this.moduleRepository.getWorkspaceModuleProvider(workspaceFsPath);
 
     return Promise.all([
       findNpmPackageName(searchVariableName, workspaceFsPath),
-      findWorkspaceModules(this.moduleProvider, document.fileName, searchVariableName),
+      findWorkspaceModules(workspaceModuleProvider, document.fileName, searchVariableName),
     ]).then(([npmPackageNames, moduleNames]) => npmPackageNames.concat(moduleNames))
       .then((packageNames) => {
         return packageNames.map((packageName) => {
@@ -72,7 +79,7 @@ export class ImportProvider implements CodeActionProvider {
   }
 
   public dispose() {
-    this.moduleProvider.dispose();
+    this.moduleRepository.dispose();
     console.log('Import provider is disposed');
   }
 }

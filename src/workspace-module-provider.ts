@@ -4,12 +4,12 @@ import * as path from 'path';
 
 import { stripExtension } from './utils';
 import { getConfig } from './config';
+import { IDisposable } from './common-interfaces';
 
 const allJsFilesGlobPattern = '**/*.{js,jsx}';
 
-export interface IWorkspaceModuleProvider {
+export interface IWorkspaceModuleProvider extends IDisposable {
   getWorkspaceModules(): IFileInfo[];
-  dispose(): void;
 }
 
 export interface IFileInfo {
@@ -27,9 +27,9 @@ function toFileInfo(fsPath: string): IFileInfo {
 export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
   private files: IFileInfo[] = [];
   private fsWatcher: FileSystemWatcher;
-  constructor() {
-    this.watchWorkspaceFiles();
-    this.cacheModulePaths();
+  constructor(workspaceFsPath: string) {
+    this.watchWorkspaceFiles(workspaceFsPath);
+    this.cacheModulePaths(workspaceFsPath);
   }
 
   public getWorkspaceModules(): IFileInfo[] {
@@ -40,12 +40,11 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
     this.fsWatcher.dispose();
   }
 
-  private watchWorkspaceFiles() {
-    this.fsWatcher = workspace.createFileSystemWatcher(allJsFilesGlobPattern, false, true);
+  private watchWorkspaceFiles(workspaceFsPath) {
+    this.fsWatcher = workspace.createFileSystemWatcher(`${workspaceFsPath}/${allJsFilesGlobPattern}`, false, true);
 
     this.fsWatcher.onDidCreate((uri) => {
       this.files.push(toFileInfo(uri.fsPath));
-      console.log(this.files);
     });
 
     this.fsWatcher.onDidDelete((uri) => {
@@ -53,12 +52,10 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
       if (itemIndex) {
         this.files.splice(itemIndex, 1);
       }
-      console.log(this.files);
     });
   }
 
-  private cacheModulePaths() {
-    const workspacePath = workspace.workspaceFolders[0].uri.fsPath;
+  private cacheModulePaths(workspacePath) {
     const excludedSearchPatterns = getConfig().searchExcludeGlobPatterns
       .map((pattern) => `${pattern}/**`);
     const glob = new Glob(`${workspacePath}/${allJsFilesGlobPattern}`, {
@@ -68,7 +65,6 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
         console.log(err);
       }
       this.files = matches.map(toFileInfo);
-      console.log(this.files);
     });
   }
 }

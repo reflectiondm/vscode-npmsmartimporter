@@ -1,6 +1,5 @@
 import { readFile } from 'fs';
 import { join } from 'path';
-import { workspace } from 'vscode';
 import { wordBasedMatch, exactMatch, conventionalMatch } from './dependencies-matcher';
 import { getConfig } from './config';
 
