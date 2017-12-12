@@ -3,6 +3,7 @@ import { join } from 'path';
 import { wordBasedMatch, exactMatch, conventionalMatch } from './dependencies-matcher';
 import { getConfig } from './config';
 import { Uri } from 'vscode';
+import { IModuleInfo, ModuleType } from './common-interfaces';
 
 const knownConventions = [
   { conventionalVariableName: 'ko', packageName: 'knockout' },
@@ -31,7 +32,7 @@ function mapToProjectDependencies(packageJson) {
   };
 }
 
-function findNpmPackageName(packageName: string, workspaceFsUri: Uri): Promise<string[]> {
+function findNpmPackageName(packageName: string, workspaceFsUri: Uri): Promise<IModuleInfo[]> {
   if (!packageName) {
     return Promise.resolve([]);
   }
@@ -39,13 +40,17 @@ function findNpmPackageName(packageName: string, workspaceFsUri: Uri): Promise<s
   const packageJsonPath = join(workspaceFsUri.fsPath, 'package.json');
   return readJson(packageJsonPath)
     .then(mapToProjectDependencies)
-    .then((project) => [].concat(...
+    .then((project) => new Array<string>().concat(...
       wordBasedMatch(packageName, project.dependencies),
       wordBasedMatch(packageName, project.devDependencies),
       conventionalMatch(packageName, getConventions(workspaceFsUri), project.dependencies),
       conventionalMatch(packageName, getConventions(workspaceFsUri), project.devDependencies),
       exactMatch(packageName, nodePackages),
-    ));
+    ))
+    .then((moduleNames) => moduleNames.map((moduleName) => ({
+      moduleName,
+      moduleType: ModuleType.npmPackage,
+    })));
 }
 
 export {

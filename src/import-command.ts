@@ -1,5 +1,6 @@
 import { TextEditor, TextEditorEdit, Position, TextDocument } from 'vscode';
 import { getConfig } from './config';
+import { ModuleType } from './common-interfaces';
 
 const importTypes = {
   es6: 'es6',
@@ -11,7 +12,8 @@ export function importPackageEditorCommand(
   textEditor: TextEditor,
   edit: TextEditorEdit,
   packageName: string,
-  wordText: string) {
+  wordText: string,
+  moduleType: ModuleType) {
   if (!packageName || !wordText) {
     return;
   }

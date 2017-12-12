@@ -12,7 +12,6 @@ import {
 
 import { findNpmPackageName } from './dependencies-resolver';
 import { getConfig } from './config';
-import { IWorkspaceModuleProvider } from './workspace-module-provider';
 import { findWorkspaceModules } from './workspace-module-resolver';
 import { IModuleProviderRepository } from './module-provider-repository';
 
@@ -66,13 +65,14 @@ export class ImportProvider implements CodeActionProvider {
     return Promise.all([
       findNpmPackageName(searchVariableName, workspaceFsUri),
       findWorkspaceModules(workspaceModuleProvider, document.uri, searchVariableName),
-    ]).then(([npmPackageNames, moduleNames]) => npmPackageNames.concat(moduleNames))
-      .then((packageNames) => {
-        return packageNames.map((packageName) => {
+    ]).then(([npmPackageInfos, workspaceModuleInfos]) => npmPackageInfos.concat(workspaceModuleInfos))
+      .then((moduleInfos) => {
+        return moduleInfos.map((moduleInfo) => {
+          const packageName = moduleInfo.moduleName;
           return {
             title: `Import ${packageName}`,
             command: 'npmSmartImporter.import',
-            arguments: [packageName, searchVariableName],
+            arguments: [packageName, searchVariableName, moduleInfo.moduleType],
           };
         });
       });
