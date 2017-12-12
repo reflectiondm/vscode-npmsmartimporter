@@ -70,7 +70,9 @@
         },
         "npmSmartImporter.ignore": {
           "type": "array",
-          "default": [ "**/node_modules" ],
+          "default": [
+            "**/node_modules"
+          ],
           "description": "An array of glob patterns to be ignored when resolving modules names.",
           "scope": "resource"
         },
@@ -96,16 +98,16 @@
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.4",
-    "@types/glob": "^5.0.33",
-    "@types/lodash": "^4.14.76",
-    "@types/mocha": "^2.2.43",
-    "@types/node": "^8.0.31",
+    "@types/chai": "^4.0.10",
+    "@types/glob": "^5.0.34",
+    "@types/lodash": "^4.14.88",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.58",
     "chai": "^4.1.2",
-    "mocha": "^4.0.0",
-    "tslint": "^5.7.0",
-    "typescript": "^2.5.3",
-    "vscode": "^1.1.5"
+    "mocha": "^4.0.1",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
+    "vscode": "^1.1.10"
   },
   "dependencies": {
     "glob": "^7.1.2",
