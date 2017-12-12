@@ -7,7 +7,7 @@
     "email": "reflection.dm@gmail.com",
     "url": "https://github.com/reflectiondm"
   },
-  "version": "2.2.0",
+  "version": "2.2.1",
   "icon": "icon.png",
   "license": "MIT",
   "repository": {
@@ -47,37 +47,44 @@
         "npmSmartImporter.autoDetectImportStatement": {
           "type": "boolean",
           "default": true,
-          "description": "Indicates if smart importer should figure out which import statement to use based on what imports are already present in the file. If none found it will adhere to useES6Import value"
+          "description": "Indicates if smart importer should figure out which import statement to use based on what imports are already present in the file. If none found it will adhere to useES6Import value",
+          "scope": "resource"
         },
         "npmSmartImporter.useES6Import": {
           "type": "boolean",
           "default": true,
-          "description": "If true, es6 import statement will be used for new imports"
+          "description": "If true, es6 import statement will be used for new imports",
+          "scope": "resource"
         },
         "npmSmartImporter.provideImportSuggestionsOnSelection": {
           "type": "boolean",
           "default": false,
-          "description": "If true, import suggestions will be provided not only for linting errors, but also when a variable is highlighted. It is useful when you do not use linter for some reason, or linting is disabled for undeclared variables."
+          "description": "If true, import suggestions will be provided not only for linting errors, but also when a variable is highlighted. It is useful when you do not use linter for some reason, or linting is disabled for undeclared variables.",
+          "scope": "resource"
         },
         "npmSmartImporter.customNamingConventions": {
           "type": "object",
           "default": {},
-          "description": "An object with keys setting naming conventions for variables and values for package names used in the project. For example: { 'osm': 'awesome-package', 'tea': 'chai' }"
+          "description": "An object with keys setting naming conventions for variables and values for package names used in the project. For example: { 'osm': 'awesome-package', 'tea': 'chai' }",
+          "scope": "resource"
         },
         "npmSmartImporter.ignore": {
           "type": "array",
           "default": [ "**/node_modules" ],
-          "description": "An array of glob patterns to be ignored when resolving modules names."
+          "description": "An array of glob patterns to be ignored when resolving modules names.",
+          "scope": "resource"
         },
         "npmSmartImporter.excludeExtension": {
           "type": "boolean",
           "default": true,
-          "description": "If true, the module file name extension will not be included into the suggested import"
+          "description": "If true, the module file name extension will not be included into the suggested import",
+          "scope": "resource"
         },
         "npmSmartImporter.skipInitialDotForRelativePath": {
           "type": "boolean",
           "default": true,
-          "description": "If true, the initial dot in relative paths like './../my-file-name' will be skipped resulting into '../my-file-name' line"
+          "description": "If true, the initial dot in relative paths like './../my-file-name' will be skipped resulting into '../my-file-name' line",
+          "scope": "resource"
         }
       }
     }

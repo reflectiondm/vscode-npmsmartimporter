@@ -1,5 +1,7 @@
 # Change Log
 All notable changes to the "npmsmartimporter" extension will be documented in this file.
+## [2.2.1]
+- Settings are now correctly applied on a per-workspace basis
 ## [2.2.0]
 - Smart importer now supports working in the multiple workspace environment
 ## [2.1.0]
