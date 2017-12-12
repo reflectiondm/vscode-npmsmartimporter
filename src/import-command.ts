@@ -24,7 +24,8 @@ export function importPackageEditorCommand(
     importInformation.importType === importTypes.es6 :
     config.useES6Import;
 
-  const lineToInsert = getImportStatement(wordText, packageName, useEs6Import);
+  const languageId = textEditor.document.languageId;
+  const lineToInsert = getImportStatement(wordText, packageName, moduleType, languageId, useEs6Import);
   edit.insert(importInformation.position, lineToInsert);
 }
 
@@ -50,7 +51,12 @@ function findFirstImportStatement(textDocument: TextDocument) {
   };
 }
 
-function getImportStatement(wordText: string, packageName: string, useEs6Import: boolean) {
-  return useEs6Import ? `import ${wordText} from '${packageName}';\n` :
+function getImportStatement(wordText: string, packageName: string, moduleType: ModuleType, languageId: string,  useEs6Import: boolean) {
+  let importStatement = 'import';
+  if (languageId.includes('typescript') && moduleType === ModuleType.npmPackage) {
+    importStatement = `${importStatement} * as`;
+  }
+
+  return useEs6Import ? `${importStatement} ${wordText} from '${packageName}';\n` :
     `const ${wordText} = require('${packageName}');\n`;
 }

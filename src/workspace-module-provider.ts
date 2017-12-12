@@ -6,7 +6,7 @@ import { stripExtension } from './utils';
 import { getConfig } from './config';
 import { IDisposable } from './common-interfaces';
 
-const allJsFilesGlobPattern = '**/*.{js,jsx}';
+const allModuleFilesGlobPattern = '**/*.{js,jsx,ts,tsx}';
 
 export interface IWorkspaceModuleProvider extends IDisposable {
   getWorkspaceModules(): IFileInfo[];
@@ -41,7 +41,7 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
   }
 
   private watchWorkspaceFiles(workspaceFsPath: Uri) {
-    this.fsWatcher = workspace.createFileSystemWatcher(`${workspaceFsPath.fsPath}/${allJsFilesGlobPattern}`, false, true);
+    this.fsWatcher = workspace.createFileSystemWatcher(`${workspaceFsPath.fsPath}/${allModuleFilesGlobPattern}`, false, true);
 
     this.fsWatcher.onDidCreate((uri) => {
       this.files.push(toFileInfo(uri.fsPath));
@@ -58,7 +58,7 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
   private cacheModulePaths(workspacePath: Uri) {
     const excludedSearchPatterns = getConfig(workspacePath).searchExcludeGlobPatterns
       .map((pattern) => `${pattern}/**`);
-    const glob = new Glob(`${workspacePath.fsPath}/${allJsFilesGlobPattern}`, {
+    const glob = new Glob(`${workspacePath.fsPath}/${allModuleFilesGlobPattern}`, {
       ignore: excludedSearchPatterns,
     }, (err, matches) => {
       if (err) {

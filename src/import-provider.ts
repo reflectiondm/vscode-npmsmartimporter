@@ -22,7 +22,8 @@ const esLintDiagnosticCodes = [
 
 function isValueNotDefinedDiagnostic(context: CodeActionContext) {
   return context.diagnostics.find((diagnostic) => diagnostic.source === 'eslint' && esLintDiagnosticCodes.some((code) => code === diagnostic.code)) ||
-    context.diagnostics.find((diagnostic) => diagnostic.source === 'jshint' && diagnostic.code === 'W117');
+    context.diagnostics.find((diagnostic) => diagnostic.source === 'jshint' && diagnostic.code === 'W117') ||
+    context.diagnostics.find((diagnostic) => diagnostic.source === 'ts' && diagnostic.code === 2304);
 }
 
 function getUndeclaredVariableName(diagnostic: Diagnostic, document: TextDocument) {
