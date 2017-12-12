@@ -1,4 +1,4 @@
-import { workspace, WorkspaceConfiguration } from 'vscode';
+import { workspace, WorkspaceConfiguration, Uri } from 'vscode';
 import { IConvention } from './dependencies-matcher';
 
 interface IConfiguration {
@@ -11,9 +11,9 @@ interface IConfiguration {
   skipInitialDotForRelativePath: boolean;
 }
 
-export function getConfig(): IConfiguration {
-  const config = workspace.getConfiguration('npmSmartImporter');
-  const filesConfig = workspace.getConfiguration('files');
+export function getConfig(uri: Uri): IConfiguration {
+  const config = workspace.getConfiguration('npmSmartImporter', uri);
+  const filesConfig = workspace.getConfiguration('files', uri);
 
   return {
     autoDetectImportStatement: config.get<boolean>('autoDetectImportStatement'),

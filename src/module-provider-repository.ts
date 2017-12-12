@@ -12,9 +12,9 @@ export class ModuleProviderRepository implements IModuleProviderRepository {
 
   constructor() {
     workspace.workspaceFolders.forEach((workspaceFolder) => {
-      const workspaceFsPath = workspaceFolder.uri.fsPath;
-      const workspaceModuleProvider = new WorkspaceModuleProvider(workspaceFsPath);
-      this.workspaceModuleProviders.set(workspaceFsPath, workspaceModuleProvider);
+      const workspaceFsUri = workspaceFolder.uri;
+      const workspaceModuleProvider = new WorkspaceModuleProvider(workspaceFsUri);
+      this.workspaceModuleProviders.set(workspaceFsUri.fsPath, workspaceModuleProvider);
     });
 
     this.onDidChangeWorkspaceFoldersHandle = workspace.onDidChangeWorkspaceFolders(this.updateModuleProviders);
@@ -31,9 +31,9 @@ export class ModuleProviderRepository implements IModuleProviderRepository {
 
   private updateModuleProviders = (e: WorkspaceFoldersChangeEvent) => {
     e.added.forEach((wsFolder) => {
-      const fsPath = wsFolder.uri.fsPath;
-      const moduleProvider = new WorkspaceModuleProvider(fsPath);
-      this.workspaceModuleProviders.set(fsPath, moduleProvider);
+      const fsUri = wsFolder.uri;
+      const moduleProvider = new WorkspaceModuleProvider(fsUri);
+      this.workspaceModuleProviders.set(fsUri.fsPath, moduleProvider);
     });
 
     e.removed.forEach((wsFolder) => {

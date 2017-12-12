@@ -2,6 +2,7 @@ import { readFile } from 'fs';
 import { join } from 'path';
 import { wordBasedMatch, exactMatch, conventionalMatch } from './dependencies-matcher';
 import { getConfig } from './config';
+import { Uri } from 'vscode';
 
 const knownConventions = [
   { conventionalVariableName: 'ko', packageName: 'knockout' },
@@ -13,8 +14,8 @@ const nodePackages = [
   'readline', 'stream', 'tls', 'tty', 'dgram', 'url', 'util', 'v8', 'vm', 'zlib',
 ];
 
-function getConventions() {
-  return knownConventions.concat(getConfig().customNamingConventions);
+function getConventions(workspaceFsUri: Uri) {
+  return knownConventions.concat(getConfig(workspaceFsUri).customNamingConventions);
 }
 
 function readJson(file) {
@@ -30,19 +31,19 @@ function mapToProjectDependencies(packageJson) {
   };
 }
 
-function findNpmPackageName(packageName: string, workspaceFsPath: string): Promise<string[]> {
+function findNpmPackageName(packageName: string, workspaceFsUri: Uri): Promise<string[]> {
   if (!packageName) {
     return Promise.resolve([]);
   }
 
-  const packageJsonPath = join(workspaceFsPath, 'package.json');
+  const packageJsonPath = join(workspaceFsUri.fsPath, 'package.json');
   return readJson(packageJsonPath)
     .then(mapToProjectDependencies)
     .then((project) => [].concat(...
       wordBasedMatch(packageName, project.dependencies),
       wordBasedMatch(packageName, project.devDependencies),
-      conventionalMatch(packageName, getConventions(), project.dependencies),
-      conventionalMatch(packageName, getConventions(), project.devDependencies),
+      conventionalMatch(packageName, getConventions(workspaceFsUri), project.dependencies),
+      conventionalMatch(packageName, getConventions(workspaceFsUri), project.devDependencies),
       exactMatch(packageName, nodePackages),
     ));
 }

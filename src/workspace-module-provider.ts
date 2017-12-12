@@ -1,5 +1,5 @@
 import * as Glob from 'glob';
-import { workspace, FileSystemWatcher } from 'vscode';
+import { workspace, FileSystemWatcher, Uri } from 'vscode';
 import * as path from 'path';
 
 import { stripExtension } from './utils';
@@ -27,9 +27,9 @@ function toFileInfo(fsPath: string): IFileInfo {
 export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
   private files: IFileInfo[] = [];
   private fsWatcher: FileSystemWatcher;
-  constructor(workspaceFsPath: string) {
-    this.watchWorkspaceFiles(workspaceFsPath);
-    this.cacheModulePaths(workspaceFsPath);
+  constructor(workspaceFsUri: Uri) {
+    this.watchWorkspaceFiles(workspaceFsUri);
+    this.cacheModulePaths(workspaceFsUri);
   }
 
   public getWorkspaceModules(): IFileInfo[] {
@@ -40,8 +40,8 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
     this.fsWatcher.dispose();
   }
 
-  private watchWorkspaceFiles(workspaceFsPath) {
-    this.fsWatcher = workspace.createFileSystemWatcher(`${workspaceFsPath}/${allJsFilesGlobPattern}`, false, true);
+  private watchWorkspaceFiles(workspaceFsPath: Uri) {
+    this.fsWatcher = workspace.createFileSystemWatcher(`${workspaceFsPath.fsPath}/${allJsFilesGlobPattern}`, false, true);
 
     this.fsWatcher.onDidCreate((uri) => {
       this.files.push(toFileInfo(uri.fsPath));
@@ -55,10 +55,10 @@ export class WorkspaceModuleProvider implements IWorkspaceModuleProvider {
     });
   }
 
-  private cacheModulePaths(workspacePath) {
-    const excludedSearchPatterns = getConfig().searchExcludeGlobPatterns
+  private cacheModulePaths(workspacePath: Uri) {
+    const excludedSearchPatterns = getConfig(workspacePath).searchExcludeGlobPatterns
       .map((pattern) => `${pattern}/**`);
-    const glob = new Glob(`${workspacePath}/${allJsFilesGlobPattern}`, {
+    const glob = new Glob(`${workspacePath.fsPath}/${allJsFilesGlobPattern}`, {
       ignore: excludedSearchPatterns,
     }, (err, matches) => {
       if (err) {

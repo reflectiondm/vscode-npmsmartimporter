@@ -16,7 +16,7 @@ export function importPackageEditorCommand(
     return;
   }
 
-  const config = getConfig();
+  const config = getConfig(textEditor.document.uri);
   const importInformation = findFirstImportStatement(textEditor.document);
   const useEs6Import = config.autoDetectImportStatement && importInformation.importType !== importTypes.none ?
     importInformation.importType === importTypes.es6 :

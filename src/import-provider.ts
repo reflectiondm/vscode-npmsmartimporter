@@ -44,7 +44,7 @@ export class ImportProvider implements CodeActionProvider {
     context: CodeActionContext,
     token: CancellationToken): ProviderResult<Command[]> {
 
-    const config = getConfig();
+    const config = getConfig(document.uri);
     const diagnostic = isValueNotDefinedDiagnostic(context);
     let searchVariableName;
     if (diagnostic) {
@@ -60,12 +60,12 @@ export class ImportProvider implements CodeActionProvider {
       return [];
     }
 
-    const workspaceFsPath = currentDocumentWorkspace.uri.fsPath;
-    const workspaceModuleProvider = this.moduleRepository.getWorkspaceModuleProvider(workspaceFsPath);
+    const workspaceFsUri = currentDocumentWorkspace.uri;
+    const workspaceModuleProvider = this.moduleRepository.getWorkspaceModuleProvider(workspaceFsUri.fsPath);
 
     return Promise.all([
-      findNpmPackageName(searchVariableName, workspaceFsPath),
-      findWorkspaceModules(workspaceModuleProvider, document.fileName, searchVariableName),
+      findNpmPackageName(searchVariableName, workspaceFsUri),
+      findWorkspaceModules(workspaceModuleProvider, document.uri, searchVariableName),
     ]).then(([npmPackageNames, moduleNames]) => npmPackageNames.concat(moduleNames))
       .then((packageNames) => {
         return packageNames.map((packageName) => {
