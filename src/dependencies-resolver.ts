@@ -27,8 +27,8 @@ function readJson(file) {
 
 function mapToProjectDependencies(packageJson) {
   return {
-    dependencies: Object.keys(packageJson.dependencies),
-    devDependencies: Object.keys(packageJson.devDependencies),
+    dependencies: Object.keys(packageJson.dependencies).filter((key) => !key.includes('@types/')),
+    devDependencies: Object.keys(packageJson.devDependencies).filter((key) => !key.includes('@types/')),
   };
 }
 
