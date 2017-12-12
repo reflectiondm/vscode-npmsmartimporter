@@ -29,6 +29,8 @@ This extension contributes the following settings:
 
 ---------------
 # Changelog
+## [3.0.0]
+- Smart importer now supports typescript (.ts and .tsx) files
 ## [2.2.1]
 - Settings are now correctly applied on a per-workspace basis
 ## [2.2.0]
